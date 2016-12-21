@@ -1,0 +1,36 @@
+to run-once
+	init-jlogo
+	init-ulogo
+	repeat 20 [
+			receive-packet
+			wait 10
+	]
+end
+
+to init-jlogo
+	make "light-list []
+	init-time
+end
+
+to init-ulogo
+	stopvm
+	ul-power
+	ul-init
+	ul-go
+end
+
+to process-data-packet
+	let [light ( (last :p20-word00) + (last :p20-word01) + (last :p20-word02) ) / 3 ]
+	make "light-list (se :light-list :light)	
+	if ((count :light-list) > 1)[
+		plot-light
+	]	
+end
+
+to plot-light
+   aspect 2 2
+   x-data "|Elapsed_Time_(sec)| :time-list  ;xdata is time
+   y-data "|Light_(adc_unit)|   :light-list ;ydata is light
+   quick-plot  ;plot points as circles
+   display-plot        tile 2 2 2 1
+end

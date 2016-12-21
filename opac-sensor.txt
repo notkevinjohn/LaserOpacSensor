@@ -1,0 +1,52 @@
+to ul-power
+	init-onboardleds
+	redon
+	wait 10
+	redoff
+end
+
+to ul-init
+	dp8output
+	yellowon
+	wait 10
+	yellowoff
+end
+
+to laseron
+	dp8on
+end
+
+to laseroff
+	dp8off
+end
+
+to readLightSensor
+	output readADC 5
+end
+
+to collect-data
+   blueon
+   init-packet 20 
+   packet-word readLightSensor
+   packet-word readLightSensor
+   packet-word readLightSensor 
+   add-checksum 
+	wait 10
+	blueoff
+end
+
+to ul-go
+	greenon
+	wait 10
+	greenoff
+	laseron
+	repeat 10 [
+		collect-data
+		wait 10
+	]
+	laseroff
+	repeat 10 [
+		collect-data
+		wait 10
+	]
+end
